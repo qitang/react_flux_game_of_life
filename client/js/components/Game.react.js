@@ -13,40 +13,30 @@
  */
  
 var React = require('react');
-var TermStore = require('../stores/TermStore');
-
-var StartPage= require('./startPage.react');
+var GameActions = require('../actions/GameActions');
+var Row= require('./Row.react');
 /**
  * Retrieve the current Term data from the TermStore
  */
-function getTermState() {
-  return {
-    options: TermStore.getAll(),
-    term : ""
-  };
-}
-
+ 
 var Game = React.createClass({
 
-  getInitialState: function() {
-    return getTermState();
-  },
-
-  componentDidMount: function() {
-    TermStore.addChangeListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    TermStore.removeChangeListener(this._onChange);
-  },
+  
 
   /**
    * @return {object}
    */
   render: function() {
+    var self = this
     return (
       <div>
-        111111111
+          <button onClick={this.next}>next</button>
+          <button onClick={this.start}>start</button>
+          <button onClick={this.clear}>stop</button>
+          <button onClick={this.randomize}>randomize</button>
+          {Array.apply(null, Array(+self.props.data.row)).map(function(v, index){
+            return <Row data = {self.props.data} key={index} rowIndex = {index}/>
+          })}
       </div>
     );
   },
@@ -54,10 +44,21 @@ var Game = React.createClass({
   /**
    * Event handler for 'change' events coming from the TermStore
    */
-  _onChange: function() {
-    this.setState(getTermState());
-  }
+  next : function(){ 
+    GameActions.generate();
+  },
 
+  randomize : function(){ 
+    GameActions.randomize();
+  },
+  start : function() {
+     
+      this.intervalID = setInterval(this.next , 300)
+
+  },
+  clear : function() {
+      clearInterval(this.intervalID)
+  }
 });
 
 module.exports = Game;

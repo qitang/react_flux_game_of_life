@@ -9,13 +9,7 @@
   
 var GameActions = require('../actions/GameActions');  
 var React = require('react');
-var history = require('history');
-var createHistory = history.createHistory;
-var useBasename = history.useBasename;
 
-var his = useBasename(createHistory)({
-  basename: '/'
-})
 
 var formStyle = {
   backgroundColor: 'grey',
@@ -31,12 +25,12 @@ var StartPage = React.createClass({
   handleSubmit : function(){
     event.preventDefault();
     GameActions.create({
-      row_nubmer : this.refs.row.getDOMNode().value,
-      col_number : this.refs.col.getDOMNode().value
+      row : +this.refs.row.getDOMNode().value,
+      col : +this.refs.col.getDOMNode().value
     })
     this.refs.row.getDOMNode().value = '';
     this.refs.col.getDOMNode().value = '';
-    // his.pushState(1212, '/main')
+    this.props.history.pushState(null, '/main')
   },
   render: function() {
     return (

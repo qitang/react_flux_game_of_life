@@ -22,14 +22,14 @@
     "reactify": "^0.15.2",
     "uglify-js": "~2.4.15",
     "watchify": "^2.1.1",
-    "express": "~4.0.0"
+    "express": "~4.8.0"
   },
   "scripts": {
     "start": "watchify -o client/js/bundle.js -v -d client/js/app.js",
     "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > clien/js/bundle.min.js",
     "test": "jest"
   },
-  "author": "Bill Fisher",
+  "author": "Qi Tang",
   "browserify": {
     "transform": [
       "reactify",

@@ -16,21 +16,18 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var Cell = function(row, col, val) {
-    this.row = row;
-    this.val = val;
-    this.col = col;
+var _data = {
+   cells : [],
+   row : 0,
+   col : 0
 }
 
-var _cells = [];
-
-function init(row, col) {
-  console.log(row,col)
-  for(var i =0; i <row ;i++) {
-    for(var j =0 ;j < col ; j++) {
-      _cells.push(new Cell(i, j , 1));
-    }
-  }
+function init(payload) {
+    _data.row = payload.row;
+    _data.col = payload.col;
+   for(var i = 0 ;i < payload.row * payload.col ; i++) {
+      _data.cells.push(false);
+   }
 }
 
 /**
@@ -38,10 +35,53 @@ function init(row, col) {
  * @param  {object} updates An object literal containing only the data to be
  *     updated.
  */
-function updateAll(updates) {
-  for (var id in _todos) {
-    update(id, updates);
+function update(rowIndex, colIndex) {
+  _data.cells[rowIndex *_data.col + colIndex] = !_data.cells[rowIndex *_data.col + colIndex];
+}
+
+function to1D(row, col) {
+  return row *_data.col + col;
+}
+
+function randomize() {
+  for(var i =0 ;i < _data.cells.length ; i ++ ) {
+    _data.cells[i] = Math.random() > 0.44
   }
+}
+
+function checkAround(row, col) {
+  var count = 0;
+  var cells = _data.cells;
+  var current = cells[to1D(row, col)];
+  for(var i = col-1; i<=col+1 ; i++) {
+    for(var j = row-1; j <=row+1 ; j++) {
+     if(i<0 || j <0) continue;
+     if(i >=_data.col || j >= _data.row) continue;
+     if(cells[to1D(j,i)]) {
+
+        count++;
+     }
+    }
+  }
+  return current ? count-1 : count;
+}
+
+function generate() {
+  var cp = _data.cells.slice();
+  for(var i =0 ; i<_data.row; i++ ) {
+    for(var j = 0 ; j < _data.col; j++) {
+      var index = to1D(i,j);
+      var around = checkAround(i,j);
+      if(_data.cells[index]) {
+        if(around < 2 || around > 3) {
+          cp[index] = false;
+        }
+      } else if(around===3) {
+        cp[index] = true;
+      }
+    }
+  }
+  _data.cells = cp;
 }
 
 var GameStore = assign({}, EventEmitter.prototype, {
@@ -49,7 +89,7 @@ var GameStore = assign({}, EventEmitter.prototype, {
  
  
   getAll: function() {
-    return _cells;
+    return _data;
   },
 
   emitChange: function() {
@@ -75,53 +115,26 @@ var GameStore = assign({}, EventEmitter.prototype, {
 
 // Register callback to handle all updates
 AppDispatcher.register(function(action) {
-  var text;
 
   switch(action.actionType) {
-    case GameConstants.Game_CREATE:
+    case GameConstants.GAME_CREATE:
       if (action.text !== null) {
         init(action.text);
         GameStore.emitChange();
       }
       break;
-
-    case TodoConstants.TODO_TOGGLE_COMPLETE_ALL:
-      if (GameStore.areAllComplete()) {
-        updateAll({complete: false});
-      } else {
-        updateAll({complete: true});
-      }
+    case GameConstants.GAME_UPDATE:
+      update(action.rowIndex, action.colIndex)
       GameStore.emitChange();
       break;
-
-    case TodoConstants.TODO_UNDO_COMPLETE:
-      update(action.id, {complete: false});
+    case GameConstants.GAME_GENERATE:
+      generate();
       GameStore.emitChange();
       break;
-
-    case TodoConstants.TODO_COMPLETE:
-      update(action.id, {complete: true});
+    case GameConstants.GAME_RANDOMIZE: 
+      randomize();
       GameStore.emitChange();
       break;
-
-    case TodoConstants.TODO_UPDATE_TEXT:
-      text = action.text.trim();
-      if (text !== '') {
-        update(action.id, {text: text});
-        GameStore.emitChange();
-      }
-      break;
-
-    case TodoConstants.TODO_DESTROY:
-      destroy(action.id);
-      GameStore.emitChange();
-      break;
-
-    case TodoConstants.TODO_DESTROY_COMPLETED:
-      destroyCompleted();
-      GameStore.emitChange();
-      break;
-
     default:
       // no op
   }

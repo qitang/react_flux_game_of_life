@@ -7,6 +7,7 @@
 var express = require('express');
 var app     = express();
 var port    =   process.env.PORT || 8080;
+var path = require('path');
 
 var bodyParser = require('body-parser');
 
@@ -54,6 +55,8 @@ router.post('/restaurant', function(req, res, next) {
    })
 });
 
+
+
 // about page route (http://localhost:8080/about)
 router.post('/search', function(req, res) {
   console.log(req.body, '---------')
@@ -76,7 +79,11 @@ router.post('/search', function(req, res) {
  
 // apply the routes to our application
 app.use('/api', router);
-app.use('/static', express.static(__dirname + '/../client'));
+
+app.get('/', function(req,res){
+  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+})
+app.use('/client', express.static(__dirname + '/../client'));
 
 app.use(function(err, req, res, next) {
   console.error(err.stack);

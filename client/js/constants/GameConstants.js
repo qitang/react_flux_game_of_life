@@ -13,10 +13,10 @@ var keyMirror = require('keymirror');
 
 module.exports = keyMirror({
   GAME_CREATE: null,
-  GAME_COMPLETE: null,
+  GAME_UPDATE: null,
   GAME_DESTROY: null,
-  GAME_DESTROY_COMPLETED: null,
-  GAME_TOGGLE_COMPLETE_ALL: null,
+  GAME_GENERATE: null,
+  GAME_RANDOMIZE: null,
   GAME_UNDO_COMPLETE: null,
   GAME_UPDATE_TEXT: null
 });

@@ -11,7 +11,13 @@ var React = require('react');
 
 // // var TodoApp = require('./components/TodoApp.react');
 var StartPage = require('./components/startPage.react');
+var Game = require('./components/Game.react');
 var App = require('./components/App.react');
+
+
+var history = require('history');
+var createHistory = history.createHistory;
+var useBasename = history.useBasename;
 
 
 var ReactRouter = require('react-router')
@@ -22,9 +28,10 @@ var IndexRoute  = ReactRouter.IndexRoute
  
 
 React.render((
-  <Router>
+  <Router history={createHistory()}>
     <Route path="/" component={App}>
       <IndexRoute component={StartPage} />
+      <Route path="main" component={Game}/>
     </Route>
   </Router>
 ), document.getElementById('app'))

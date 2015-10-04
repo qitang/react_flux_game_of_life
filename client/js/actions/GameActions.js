@@ -19,7 +19,7 @@ var GameActions = {
    */
   create: function(text) {
     AppDispatcher.dispatch({
-      actionType: GameConstants.Game_CREATE,
+      actionType: GameConstants.GAME_CREATE,
       text: text
     });
   },
@@ -28,42 +28,32 @@ var GameActions = {
    * @param  {string} id The ID of the Game item
    * @param  {string} text
    */
-  updateText: function(id, text) {
+  update: function(rowIndex, colIndex) {
     AppDispatcher.dispatch({
-      actionType: GameConstants.Game_UPDATE_TEXT,
-      id: id,
-      text: text
+      actionType: GameConstants.GAME_UPDATE,
+      colIndex: +colIndex,
+      rowIndex: +rowIndex
     });
   },
+
 
   /**
    * Toggle whether a single Game is complete
    * @param  {object} Game
    */
-  toggleComplete: function(Game) {
-    var id = Game.id;
-    var actionType = Game.complete ?
-        GameConstants.Game_UNDO_COMPLETE :
-        GameConstants.Game_COMPLETE;
-
+  generate: function() {
+    
     AppDispatcher.dispatch({
-      actionType: actionType,
-      id: id
+      actionType: GameConstants.GAME_GENERATE,
     });
   },
 
-  /**
-   * Mark all Games as complete
-   */
-  toggleCompleteAll: function() {
+  randomize : function(){
     AppDispatcher.dispatch({
-      actionType: GameConstants.Game_TOGGLE_COMPLETE_ALL
+      actionType: GameConstants.GAME_RANDOMIZE,
     });
   },
-
-  /**
-   * @param  {string} id
-   */
+  
   destroy: function(id) {
     AppDispatcher.dispatch({
       actionType: GameConstants.Game_DESTROY,

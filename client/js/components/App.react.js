@@ -15,12 +15,14 @@
 var React = require('react');
 var GameStore = require('../stores/GameStore');
 var Game = require('./Game.react');
+
+
 /**
  * Retrieve the current Term data from the TermStore
  */
 function getAllState() {
    return {
-     cells : GameStore.getAll(),
+     data : GameStore.getAll(),
    }
 }
 
@@ -37,21 +39,30 @@ var App = React.createClass({
   componentWillUnmount: function() {
     GameStore.removeChangeListener(this._onChange);
   },
+  
 
   /**
    * @return {object}
    */
   render: function() {
+    var self = this;
     return (
-      <div>
+      <div className="main">
         <h1>Welcome to Game of Life</h1>
-        {this.props.children}
+    
+        {
+
+          React.Children.map(this.props.children, function (child) {
+            var r =  React.cloneElement(child, {data : self.state.data})
+            return r
+          })
+        }
       </div>
     );
   },
 
   /**
-   * Event handler for 'change' events coming from the TermStore
+   * Event handler for 'change' events coming from the GameStore
    */
   _onChange: function() {
     this.setState(getAllState());
