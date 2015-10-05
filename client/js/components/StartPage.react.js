@@ -7,7 +7,6 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
   
-var GameActions = require('../actions/GameActions');  
 var React = require('react');
 
 
@@ -24,13 +23,10 @@ var StartPage = React.createClass({
    */
   handleSubmit : function(){
     event.preventDefault();
-    GameActions.create({
-      row : +this.refs.row.getDOMNode().value,
-      col : +this.refs.col.getDOMNode().value
-    })
+ 
+    this.props.history.pushState(null, '/main', {row: this.refs.row.getDOMNode().value,col: this.refs.col.getDOMNode().value});
     this.refs.row.getDOMNode().value = '';
     this.refs.col.getDOMNode().value = '';
-    this.props.history.pushState(null, '/main')
   },
   render: function() {
     return (

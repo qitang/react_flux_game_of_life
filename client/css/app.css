@@ -29,13 +29,13 @@
 
 .cell {
 	display: inline-block;
-	width:  10px;
-	height: 8px;
+	width:  16px;
+	height: 16px;
 	border: 1px solid #3498DB
 }
 
 .row {
-	height: 10px;
+	height: 18px;
 }
 
 .active {

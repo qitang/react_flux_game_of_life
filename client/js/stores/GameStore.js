@@ -49,6 +49,12 @@ function randomize() {
   }
 }
 
+function destroy() {
+  for(var i =0 ; i <_data.cells.length; i++) {
+    _data.cells[i] = false;
+  }
+}
+
 function checkAround(row, col) {
   var count = 0;
   var cells = _data.cells;
@@ -133,6 +139,10 @@ AppDispatcher.register(function(action) {
       break;
     case GameConstants.GAME_RANDOMIZE: 
       randomize();
+      GameStore.emitChange();
+      break;
+    case GameConstants.Game_DESTROY:
+      destroy();
       GameStore.emitChange();
       break;
     default:

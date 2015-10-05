@@ -57,7 +57,6 @@ var GameActions = {
   destroy: function(id) {
     AppDispatcher.dispatch({
       actionType: GameConstants.Game_DESTROY,
-      id: id
     });
   },
 

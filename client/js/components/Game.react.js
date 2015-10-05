@@ -21,7 +21,13 @@ var Row= require('./Row.react');
  
 var Game = React.createClass({
 
-  
+  componentWillMount: function() {
+   GameActions.create({
+     row : +this.props.location.query.row,
+     col : +this.props.location.query.col
+   })
+  },
+
 
   /**
    * @return {object}
@@ -32,8 +38,9 @@ var Game = React.createClass({
       <div>
           <button onClick={this.next}>next</button>
           <button onClick={this.start}>start</button>
-          <button onClick={this.clear}>stop</button>
+          <button onClick={this.stop}>stop</button>
           <button onClick={this.randomize}>randomize</button>
+          <button onClick={this.clear}>clear</button>
           {Array.apply(null, Array(+self.props.data.row)).map(function(v, index){
             return <Row data = {self.props.data} key={index} rowIndex = {index}/>
           })}
@@ -56,8 +63,11 @@ var Game = React.createClass({
       this.intervalID = setInterval(this.next , 300)
 
   },
-  clear : function() {
+  stop : function() {
       clearInterval(this.intervalID)
+  },
+  clear : function() {
+      GameActions.destroy();
   }
 });
 
