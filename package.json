@@ -29,7 +29,7 @@
     "watchify": "^2.1.1"
   },
   "scripts": {
-    "start": "watchify -o client/js/bundle.js -v -d client/js/app.js",
+    "start": "node server/index.js",
     "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > clien/js/bundle.min.js",
     "test": "jest"
   },
