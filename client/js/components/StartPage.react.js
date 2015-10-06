@@ -11,7 +11,6 @@ var React = require('react');
 
 
 var formStyle = {
-  backgroundColor: 'grey',
   padding : '200px'
 };
 
