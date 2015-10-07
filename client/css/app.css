@@ -20,6 +20,11 @@
 }
 */
 
+
+.vertical {
+	vertical-align: super
+}
+
 .tip {
 
 	color : #2980B9;

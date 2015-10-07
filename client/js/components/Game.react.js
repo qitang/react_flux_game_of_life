@@ -28,20 +28,36 @@ var Game = React.createClass({
    })
   },
 
-
+  getInitialState : function() {
+    return {
+      intervalID : null,
+      speed : 10
+    }
+  },
   /**
    * @return {object}
    */
   render: function() {
-    var self = this
+    var self = this;
+    var ctrlButton;
+    if(this.state.intervalID) {
+      ctrlButton = <button onClick={this.stop}>stop</button>
+    } else {
+      ctrlButton = <button onClick={this.start}>start</button>
+    }
+
     return (
       <div>
           <h4 className="tip"><b>Hold</b> ctrl when moving the mouse to fast select cells</h4>
           <button onClick={this.next}>next</button>
-          <button onClick={this.start}>start</button>
-          <button onClick={this.stop}>stop</button>
+          {ctrlButton}
           <button onClick={this.randomize}>randomize</button>
           <button onClick={this.clear}>clear</button>
+          <br/>
+          <div>
+              <label  className='vertical'>speed :  1</label><input type='range' min="1" max="20" onChange={this.updateSpeed}/><label className='vertical'> 20</label>
+          </div>
+          <br/>
           {Array.apply(null, Array(+self.props.data.row)).map(function(v, index){
             return <Row data = {self.props.data} key={index} rowIndex = {index}/>
           })}
@@ -56,16 +72,22 @@ var Game = React.createClass({
     GameActions.generate();
   },
 
+  updateSpeed : function(e) {
+    this.setState({ speed: e.currentTarget.valueAsNumber });
+    this.stop();
+    console.log(this.state)
+  },
   randomize : function(){ 
     GameActions.randomize();
   },
   start : function() {
-     
-      this.intervalID = setInterval(this.next , 300)
-
+      var timeout = 1000/(this.state.speed);
+      console.log(timeout)
+      this.state.intervalID = setInterval(this.next , timeout)
   },
   stop : function() {
-      clearInterval(this.intervalID)
+      clearInterval(this.state.intervalID);
+      this.setState({intervalID:null});
   },
   clear : function() {
       GameActions.destroy();
