@@ -35,8 +35,12 @@ function init(payload) {
  * @param  {object} updates An object literal containing only the data to be
  *     updated.
  */
-function update(rowIndex, colIndex) {
-  _data.cells[rowIndex *_data.col + colIndex] = !_data.cells[rowIndex *_data.col + colIndex];
+function update(rowIndex, colIndex, value) {
+  if(value) {
+    _data.cells[rowIndex *_data.col + colIndex] = value;
+  } else {
+    _data.cells[rowIndex *_data.col + colIndex] = !_data.cells[rowIndex *_data.col + colIndex];
+  }
 }
 
 function to1D(row, col) {
@@ -130,7 +134,7 @@ AppDispatcher.register(function(action) {
       }
       break;
     case GameConstants.GAME_UPDATE:
-      update(action.rowIndex, action.colIndex)
+      update(action.rowIndex, action.colIndex, action.value)
       GameStore.emitChange();
       break;
     case GameConstants.GAME_GENERATE:

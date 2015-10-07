@@ -28,11 +28,12 @@ var GameActions = {
    * @param  {string} id The ID of the Game item
    * @param  {string} text
    */
-  update: function(rowIndex, colIndex) {
+  update: function(rowIndex, colIndex, value) {
     AppDispatcher.dispatch({
       actionType: GameConstants.GAME_UPDATE,
       colIndex: +colIndex,
-      rowIndex: +rowIndex
+      rowIndex: +rowIndex,
+      value : value
     });
   },
 

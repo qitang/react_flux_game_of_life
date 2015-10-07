@@ -2,9 +2,21 @@ module.exports = function(grunt) {
    // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-express-server');
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    watch: {
+      scripts: {
+        files: ['./client/**/*.js'],
+        tasks: ['build'],
+        options: {
+          spawn: false,
+          livereload: true,
+        },
+      },
+    },
     uglify: {
       options: {   
          mangle: true, 
@@ -20,6 +32,22 @@ module.exports = function(grunt) {
       js: {    
         src: ['./client/js/bundle.js'],
         dest: './client/js/bundle.min.js'  
+      }
+    },
+    express: {
+      options: {
+        port: process.env.PORT || 3000
+      },
+      dev: {
+        options: {
+          script: 'server/index.js',
+          debug: true
+        }
+      },
+      prod: {
+        options: {
+          script: 'dist/server/app.js'
+        }
       }
     },
     browserify: {
@@ -42,5 +70,6 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('build', ['browserify', 'uglify']);
+  grunt.registerTask('serve',['build','express:dev','watch'])
 
 };

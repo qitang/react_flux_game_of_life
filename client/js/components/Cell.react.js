@@ -32,10 +32,15 @@ var Cell = React.createClass({
       classString += ' active';
     } 
   	return (
-     <div className={classString} onClick={this.handler}></div>
+     <div className={classString} onMouseDown={this.handler} onMouseMove={this.handlerMove} ></div>
     );
   },
 
+  handlerMove : function(event){
+    if(event.ctrlKey) {
+      GameActions.update(this.props.rowIndex, this.props.colIndex, true)
+    }
+  },
   /**
    * Event handler to delete all completed TODOs
    */

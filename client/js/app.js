@@ -9,6 +9,7 @@
 
 var React = require('react');
 
+
 // // var TodoApp = require('./components/TodoApp.react');
 var StartPage = require('./components/startPage.react');
 var Game = require('./components/Game.react');

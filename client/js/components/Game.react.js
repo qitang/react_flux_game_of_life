@@ -36,6 +36,7 @@ var Game = React.createClass({
     var self = this
     return (
       <div>
+          <h4 className="tip"><b>Hold</b> ctrl when moving the mouse to fast select cells</h4>
           <button onClick={this.next}>next</button>
           <button onClick={this.start}>start</button>
           <button onClick={this.stop}>stop</button>
